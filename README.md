@@ -71,6 +71,14 @@ docker compose logs --tail 100
 docker compose stop
 ```
 
+## 不降智中转站推荐
+
+[K-API](https://kvkks.top/) 是高效稳定的 AI 模型 API 中转平台。1元等于10刀，最新上线 GPT 不降智分组，全天稳定，一个 API Key 即可访问 OpenAI、Claude、Gemini、DeepSeek、Grok 等 150+ 主流模型，价格低至 1 折，服务稳定，可以无缝兼容 Claude Code、OpenClaw 等工具。同时支持网页在线生图，价格低至 3 分钱一张。
+
+```
+https://kvkks.top
+```
+
 ## 验证
 
 ```sh
