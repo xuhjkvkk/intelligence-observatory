@@ -2,6 +2,8 @@
 
 参考 Yoshub `/intelligence` 页面交互与布局，自行实现的独立版本。包含模型生成 SVG 动画、格式检查、可选 AI 源码复核、自动重试、定时检测与最近 13 次历史记录。无需 Yoshub 管理接口。
 
+![智商在线主界面](docs/screenshots/dashboard-overview.png)
+
 ## 启动
 
 需要 Node.js 22 或更高版本。在本目录运行：
@@ -45,9 +47,9 @@ npm start
 - 全局动画开关、浅色/深色主题、移动端布局。
 - 模型结果默认禁用脚本、外链和 HTML，通过独立 iframe 沙箱显示。
 
-## 与参考站的差异
+![最近的观测与动画画廊](docs/screenshots/observation-gallery.png)
 
-实现为独立本地工作台，未复制 Yoshub 的登录、账户余额、模型渠道管理和站点品牌。参考站私有检测提示词、服务端算法和截图审核并不可获取，因此不宣称这些部分与其完全相同。
+## 安全与部署
 
 本地默认监听 `127.0.0.1`。公网版本配置 `PUBLIC_ORIGIN=https://example.com`、`BASE_PATH=/intelligence` 和 `ADMIN_PASSWORD_HASH`，通过 Nginx、Caddy 等 HTTPS 反向代理发布到 `/intelligence/`。密码使用随机盐和 scrypt 哈希；服务器只保存哈希，不保存管理密码原文。
 
