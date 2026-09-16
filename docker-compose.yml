@@ -1,0 +1,31 @@
+services:
+  intelligence:
+    build: .
+    container_name: intelligence-observatory
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:4317:4317"
+    env_file: .env
+    environment:
+      LISTEN_HOST: 0.0.0.0
+      PORT: 4317
+    volumes:
+      - ./.data:/app/.data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4317/api/auth').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

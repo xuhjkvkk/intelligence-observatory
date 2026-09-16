@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>智商在线 · Intelligence Online</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/intelligence" aria-label="智商在线首页"><img src="/favicon.svg" width="30" height="30" alt=""><span>Intelligence<span class="brand-sub">Online</span></span></a>
+    <nav aria-label="主导航"><a class="nav-active" href="/intelligence">智商在线</a><button class="nav-button" id="header-settings">检测设置</button></nav>
+    <div class="header-right"><span class="local-label"><span class="dot"></span>本地工作台</span><button class="icon-button" id="theme-toggle" aria-label="切换浅色主题" title="切换主题"></button></div>
+  </header>
+  <main class="main">
+    <div class="page-heading"><h1>智商在线</h1><div class="heading-actions"><button class="button ghost" id="settings-button"></button><button class="button primary" id="run-button"></button></div></div>
+    <p class="intro">看同一个创意，被模型画出怎样的动感。每一次全新对话，都是观察模型表现的一扇小窗。</p>
+    <div class="connection-banner" id="connection-banner" hidden></div>
+    <div class="error-banner" id="error-banner" role="alert" hidden></div>
+    <div class="status-strip"><div class="status-left"><span id="status-dot" class="dot"></span><span id="countdown" aria-live="off">正在加载检测状态…</span></div><span id="model-caption" class="muted"></span></div>
+    <section class="observations" aria-labelledby="observations-title">
+      <div class="section-heading"><div><h2 id="observations-title">最近的观测</h2><p class="muted">只保留最近 13 张卡片，过期卡片及其中的全部尝试结果会一起删除。</p></div><button class="button small" id="play-toggle"></button></div>
+      <div id="running-strip" class="running-strip" hidden></div>
+      <div id="results" aria-live="polite"><div class="empty-state"><span class="loader"></span><h3>正在加载观测记录…</h3></div></div>
+    </section>
+    <footer class="page-footer"><span>Intelligence Online</span><span>独立部署 · 本地保存 · 自定义模型接口</span></footer>
+  </main>
+  <dialog id="settings-dialog" class="dialog settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-header"><div><h2 id="settings-title">检测设置</h2><p>连接你的模型 API，开始一次全新的观测。</p></div><button class="icon-button close-dialog" aria-label="关闭设置"></button></div>
+    <form id="settings-form">
+      <div class="dialog-scroll">
+        <section class="settings-section"><h3>模型连接</h3><p class="section-description">密钥仅保存在本机服务端，不会发送到 Yoshub。</p>
+          <div class="form-grid"><label class="span-2">Base URL<input name="baseURL" type="url" placeholder="https://api.example.com/v1" autocomplete="off"><small>填写提供商的 API 根地址，可包含 /v1。</small></label>
+          <label class="span-2">API Key<div class="input-action"><input name="apiKey" type="password" placeholder="输入 API Key" autocomplete="new-password"><button type="button" class="icon-button" id="reveal-key" aria-label="显示密钥"></button></div><small id="key-help">密钥只用于向你指定的 Base URL 发起请求。</small></label>
+          <label>接口协议<select name="protocol"><option value="chat">Chat Completions</option><option value="responses">Responses</option></select></label>
+          <label>检测模型<input name="model" list="model-list" placeholder="填写实际模型 ID" maxlength="128" autocomplete="off"><datalist id="model-list"></datalist></label>
+          <label>推理强度<select name="effort"><option value="default">不发送（兼容模式）</option><option value="low">low</option><option value="medium">medium</option><option value="high">high</option><option value="xhigh">xhigh</option></select><small>接口不支持 reasoning_effort 时选择兼容模式。</small></label>
+          <label id="token-param-field">Token 参数<select name="tokenParameter"><option value="max_tokens">max_tokens</option><option value="max_completion_tokens">max_completion_tokens</option></select></label></div>
+          <div class="inline-actions"><button type="button" class="button small" id="load-models">读取已保存接口的模型列表</button><span class="muted" id="model-load-status" role="status"></span></div>
+        </section>
+        <section class="settings-section"><h3>检测与运行</h3><div class="switch-row"><div><strong>自动检测</strong><p>北京时间 08:00–23:00 使用基础间隔，23:00–次日 08:00 间隔翻倍；关闭后当前检测仍会完成。</p></div><label class="switch"><input type="checkbox" name="enabled" aria-label="自动检测"><span></span></label></div>
+          <div class="form-grid three"><label>白天检测间隔（分钟）<input name="intervalMinutes" type="number" min="1" max="1440" step="1" required><small>夜间会自动使用两倍间隔。</small></label><label>请求超时（秒）<input name="timeoutSeconds" type="number" min="5" max="600" step="1" required></label><label>最大输出 Token<input name="maxOutputTokens" type="number" min="512" max="32000" step="1" required></label><label>自动重试次数<select name="retries"><option value="0">0 · 不自动重试</option><option value="1">1 · 最多 2 次请求</option><option value="2">2 · 最多 3 次请求</option></select></label></div>
+        </section>
+        <section class="settings-section"><div class="switch-row"><div><strong>AI 源码检查</strong><p>额外调用模型检查动物、自行车结构和踩踏动画，不进行截图审查。</p></div><label class="switch"><input type="checkbox" name="aiReview" aria-label="AI 源码检查"><span></span></label></div><label>复核模型<input name="reviewModel" list="model-list" placeholder="留空则使用检测模型" maxlength="128"><small>使用同一 Base URL 和 Key。建议填写另一个模型，减少自评偏差。</small></label></section>
+        <section class="settings-section"><h3>检测提示词</h3><label><span class="sr-only">检测提示词模板</span><textarea name="prompt" rows="6" minlength="20" maxlength="8000" required></textarea><small>支持 {animal}、{scene}、{style}。每次尝试都会加入新的随机主题和一次性 SVG 校验码。</small></label></section>
+        <p class="settings-note">历史记录和各次尝试保存在项目的 .data 目录。Token 总数包含重试和 AI 复核。定时检测仅在本地服务运行期间执行。</p>
+        <p id="settings-error" class="form-error" role="alert" hidden></p>
+      </div>
+      <div class="dialog-footer"><div><button type="button" class="button ghost" id="clear-key">清除已保存密钥</button><button type="button" class="button ghost" id="logout-admin">退出管理</button></div><div><button type="button" class="button close-dialog">取消</button><button type="submit" class="button primary" id="save-settings">保存设置</button></div></div>
+    </form>
+  </dialog>
+  <dialog id="detail-dialog" class="dialog detail-dialog" aria-labelledby="detail-title"><div class="dialog-header"><div><h2 id="detail-title">检测详情</h2><p id="detail-date"></p></div><button class="icon-button close-dialog" aria-label="关闭详情"></button></div><div class="dialog-scroll" id="detail-content"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <dialog id="auth-dialog" class="dialog" style="width:420px" aria-labelledby="auth-title">
+    <div class="dialog-header"><div><h2 id="auth-title">验证管理密码</h2><p>检测设置和手动检测需要管理权限。</p></div><button class="icon-button close-dialog" aria-label="关闭密码验证"></button></div>
+    <form id="auth-form"><div class="dialog-scroll"><label>管理密码<input id="admin-password" type="password" autocomplete="current-password" required maxlength="256"></label><p id="auth-error" class="form-error" role="alert" hidden></p></div><div class="dialog-footer"><span class="muted">解锁后 1 小时内有效</span><button id="auth-submit" class="button primary" type="submit">解锁</button></div></form>
+  </dialog>
+</body>
+</html>
