@@ -2,19 +2,9 @@
 
 参考 Yoshub `/intelligence` 页面交互与布局，自行实现的独立版本。包含模型生成 SVG 动画、格式检查、可选 AI 源码复核、自动重试、定时检测与最近 13 次历史记录。无需 Yoshub 管理接口。
 
+如果你不想自己部署，可以使用[本地 EXE 版](https://github.com/xuhjkvkk/intelligence-observatory/releases/download/v1.0.1-desktop/Intelligence-Observatory-1.0.1-x64.exe)，下载后点击即可使用。
+
 ![智商在线主界面](docs/screenshots/dashboard-overview.png)
-
-## Electron 桌面版
-
-需要同时观测多个 API，或目标 API 不支持浏览器 CORS 时，可以使用 Electron 桌面版。它会用同一轮动物、场景、画风和校验码并发请求最多 12 组 `Base URL + API Key + 模型`，并把结果放在同一界面比较。
-
-[下载 Windows x64 便携版](https://github.com/xuhjkvkk/intelligence-observatory/releases/download/v1.0.1-desktop/Intelligence-Observatory-1.0.1-x64.exe)
-
-桌面版支持 Responses 与 Chat Completions、请求重试、SVG 沙箱预览、最近 8 轮本地记录和定时观测。时间间隔可在主界面的「定时设置」中配置为 `1–1440` 分钟；北京时间 08:00–23:00 使用设置值，其他时间自动使用两倍间隔。例如白天设置 30 分钟，夜间就是 60 分钟。
-
-API 请求由 Electron 主进程直接发送，因此不受浏览器 CORS 限制。配置和最近 8 轮结果保存在当前 Windows 用户的本机应用数据中；只有开启「在这台设备中保存 API Key」后才会长期保存密钥。关闭桌面程序后，定时观测会停止。
-
-该 EXE 未使用商业代码签名证书，Windows 首次运行时可能显示“未知发布者”。下载文件大小约 85 MB，SHA-256 为 `57086159A99861ED105F19D1E39C1BEC07676287B4025A86E0A1CF6BEAE636B6`。
 
 ## 启动
 
@@ -98,6 +88,18 @@ npm test
 ```
 
 测试使用本地模拟 API，不使用真实密钥、不产生模型费用。覆盖 SVG 清理、接口路径、两种协议、重试、AI 复核成功/失败、Token 累计、记录持久化、13 次保留上限、密钥不回显、敏感文件不可访问、跨站请求拦截。
+
+## Electron 桌面版
+
+需要同时观测多个 API，或目标 API 不支持浏览器 CORS 时，可以使用 Electron 桌面版。它会用同一轮动物、场景、画风和校验码并发请求最多 12 组 `Base URL + API Key + 模型`，并把结果放在同一界面比较。
+
+[下载 Windows x64 便携版](https://github.com/xuhjkvkk/intelligence-observatory/releases/download/v1.0.1-desktop/Intelligence-Observatory-1.0.1-x64.exe)
+
+桌面版支持 Responses 与 Chat Completions、请求重试、SVG 沙箱预览、最近 8 轮本地记录和定时观测。时间间隔可在主界面的「定时设置」中配置为 `1–1440` 分钟；北京时间 08:00–23:00 使用设置值，其他时间自动使用两倍间隔。例如白天设置 30 分钟，夜间就是 60 分钟。
+
+API 请求由 Electron 主进程直接发送，因此不受浏览器 CORS 限制。配置和最近 8 轮结果保存在当前 Windows 用户的本机应用数据中；只有开启「在这台设备中保存 API Key」后才会长期保存密钥。关闭桌面程序后，定时观测会停止。
+
+该 EXE 未使用商业代码签名证书，Windows 首次运行时可能显示“未知发布者”。下载文件大小约 85 MB，SHA-256 为 `57086159A99861ED105F19D1E39C1BEC07676287B4025A86E0A1CF6BEAE636B6`。
 
 ## License
 
